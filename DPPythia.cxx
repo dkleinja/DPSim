@@ -69,6 +69,7 @@ int main(int argc, char* argv[])
     int n;
     int pdg[10000];
     int parentID[10000];
+    float xProd, yProd, zProd;
     TClonesArray* p_pos = new TClonesArray("TVector3");  p_pos->BypassStreamer(); TClonesArray& pos = *p_pos;
     TClonesArray* p_mom = new TClonesArray("TVector3");  p_mom->BypassStreamer(); TClonesArray& mom = *p_mom;
 
@@ -77,6 +78,9 @@ int main(int argc, char* argv[])
 
     saveTree->Branch("eventID", &eventID, "eventID/I");
     saveTree->Branch("n", &n, "n/I");
+    //saveTree->Branch("xProd", &xProd, "xProd/F");
+    //saveTree->Branch("yProd", &yProd, "yProd/F");
+    saveTree->Branch("zProd", &zProd, "zProd/F");
     saveTree->Branch("pdg", pdg, "pdg[n]/I");
     saveTree->Branch("parentID", parentID, "parentID[n]/I");
     saveTree->Branch("pos", &p_pos, 256000, 99);
@@ -101,7 +105,9 @@ int main(int argc, char* argv[])
     {
         TVector3 vtx = p_vertexGen->generateVertex();
         double pARatio = p_vertexGen->getPARatio();
-
+	//xProd = vtx.X();
+	//yProd = vtx.Y();
+	zProd = vtx.Z();
         Pythia* p_pythia = G4UniformRand() < pARatio ? &ppGen : &pnGen;
         Event& events = p_pythia->event;
         while(!p_pythia->next()) {}

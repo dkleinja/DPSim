@@ -235,8 +235,8 @@ void DPVertexGenerator::generateVtxPerp(double& x, double& y)
     }
     else
     {
-        x = G4RandGauss::shoot(0., 1.5);
-        y = G4RandGauss::shoot(0., 1.5);
+        x = G4RandGauss::shoot(0., .45);
+        y = G4RandGauss::shoot(0., 0.33);
     }
 }
 
