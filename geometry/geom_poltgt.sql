@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.1.73, for redhat-linux-gnu (x86_64)
 --
--- Host: e906-db1.fnal.gov    Database: test_dkleinja_geom_poltgt
+-- Host: e906-db1.fnal.gov    Database: test_dkleinja_geometry_dp_ver2
 -- ------------------------------------------------------
 -- Server version	5.1.73
 
@@ -16,12 +16,12 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Current Database: `test_dkleinja_geom_poltgt`
+-- Current Database: `test_dkleinja_geometry_dp_ver2`
 --
 
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `test_dkleinja_geom_poltgt` /*!40100 DEFAULT CHARACTER SET latin1 */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `test_dkleinja_geometry_dp_ver2` /*!40100 DEFAULT CHARACTER SET latin1 */;
 
-USE `test_dkleinja_geom_poltgt`;
+USE `test_dkleinja_geometry_dp_ver2`;
 
 --
 -- Table structure for table `Alignments`
@@ -128,7 +128,7 @@ CREATE TABLE `Materials` (
 
 LOCK TABLES `Materials` WRITE;
 /*!40000 ALTER TABLE `Materials` DISABLE KEYS */;
-INSERT INTO `Materials` VALUES (1,'LH2',0.07065,1,'(H : 1.)'),(2,'LD2',0.1617,1,'(D : 1.)'),(3,'Carbon',1.802,1,'(C : 1.)'),(4,'Iron',7.874,1,'(Fe : 1.)'),(5,'Tungsten',19.3,1,'(W : 1.)'),(6,'NH3',0.917,2,'(N : 0.822, H : 0.178)'),(7,'P08CF4',0.00177504,3,'(Ar : 0.89121, C : 0.03227, H : 0.00717, F : 0.06935'),(8,'Paper',1.42,4,'(C : 0.505, H : 0.065, O : 0.425, H : 0.005)'),(9,'Vacuum',1e-12,2,'(N : 0.7, O : 0.3)'),(10,'ArCO2',0.001822,3,'(Ar : 0.77652, C : 0.05834, O : 0.16514)'),(11,'Titanium',4.54,1,'(Ti : 1.)'),(12,'Helium',0.000166,1,'(He : 1.)'),(13,'Aluminium',2.7,1,'(Al : 1.)'),(14,'Plastic',1.032,2,'(H : 0.085, C : 0.915)'),(15,'Air',0.00129,2,'(N : 0.8205, O : 0.1795)'),(16,'ND3',0.987,2,'(N : 0.7, D : 0.3)');
+INSERT INTO `Materials` VALUES (1,'LH2',0.07065,1,'(H : 1.)'),(2,'LD2',0.1617,1,'(D : 1.)'),(3,'Carbon',1.802,1,'(C : 1.)'),(4,'Iron',7.874,1,'(Fe : 1.)'),(5,'Tungsten',19.3,1,'(W : 1.)'),(6,'Ammonia',0.917,2,'(N : 0.822, H : 0.178)'),(7,'P08CF4',0.00177504,3,'(Ar : 0.89121, C : 0.03227, H : 0.00717, F : 0.06935'),(8,'Paper',1.42,4,'(C : 0.505, H : 0.065, O : 0.425, H : 0.005)'),(9,'Vacuum',0.000000000001,2,'(N : 0.7, O : 0.3)'),(10,'ArCO2',0.001822,3,'(Ar : 0.77652, C : 0.05834, O : 0.16514)'),(11,'Titanium',4.54,1,'(Ti : 1.)'),(12,'Helium',0.000166,1,'(He : 1.)'),(13,'Aluminium',2.7,1,'(Al : 1.)'),(14,'Plastic',1.032,2,'(H : 0.085, C : 0.915)'),(15,'Air',0.00129,2,'(N : 0.8205, O : 0.1795)');
 /*!40000 ALTER TABLE `Materials` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -227,7 +227,7 @@ CREATE TABLE `Targets` (
 
 LOCK TABLES `Targets` WRITE;
 /*!40000 ALTER TABLE `Targets` DISABLE KEYS */;
-INSERT INTO `Targets` VALUES (1,'T_LH2','LH2',1,50.8,0,3.81,-129.54),(3,'T_LD2','LD2',1,50.8,0,3.81,-129.54),(5,'T_Iron','Iron',3,0.635,17.018,2.54,-129.54),(6,'T_Carbon','Carbon',3,1.10744,17.018,2.54,-129.54),(7,'T_Tungsten','Tungsten',3,0.3175,17.018,2.54,-129.54),(8,'T_NH3','NH3',1,8,0,2,-330),(9,'T_ND3','ND3',1,8,0,2,-330),(10,'T_NH3Down','NH3',1,8,0,2,-129.54),(11,'T_ND3Down','ND3',1,8,0,2,-129.54);
+INSERT INTO `Targets` VALUES (1,'T_LH2','LH2',1,50.8,0,3.81,-129.54),(3,'T_LD2','LD2',1,50.8,0,3.81,-129.54),(5,'T_Iron','Iron',3,0.635,17.018,2.54,-129.54),(6,'T_Carbon','Carbon',3,1.10744,17.018,2.54,-129.54),(7,'T_Tungsten','Tungsten',3,0.3175,17.018,2.54,-129.54),(8,'T_Ammonia','Ammonia',1,8,0,2,-330);
 /*!40000 ALTER TABLE `Targets` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -240,4 +240,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-30 15:12:34
+-- Dump completed on 2016-11-30 15:04:23
