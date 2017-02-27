@@ -52,9 +52,9 @@ if options.addition != '':
         reservedKeys.append(item.split(':')[0].strip())
         reservedValFormula.append(item.split(':')[1].strip())
 
-## initialize the conf file generator, and the executable DPSim
-tconf = DPSimJobConf(options.template, reservedKeys)
-DPSim = os.path.join(os.getenv('PYTHIABKG_ROOT'), 'build', 'bin', 'DPSim')
+## initialize the conf file generator, and the executable DPPythia
+tconf = DPPythiaJobConf(options.template, reservedKeys)
+DPPythia = os.path.join(os.getenv('DPSIM_ROOT'), 'build', 'bin', 'DPPythia')
 
 ## set up the working directories
 workdir = os.path.abspath(options.workdir)
@@ -82,7 +82,7 @@ for i, conf in enumerate(confs):
 ## if in local mode, make everything locally in the background
 if options.local:
     for i in range(len(confs)):
-        cmd = '%s %s > %s 2>&1 &' % (DPSim, confs[i], logs[i])
+        cmd = '%s %s > %s 2>&1 &' % (DPPythia, confs[i], logs[i])
         runCmd(cmd)
 
 ## if in grid mode, assume running on gpvm machines
@@ -109,11 +109,11 @@ if options.grid:
 
         fout.write('source ' + os.path.join(os.getenv('SEAQUEST_DISTRIBUTION_ROOT'), 'setup/setup.sh') + '\n')
         fout.write('source ' + os.path.join(os.getenv('DPSIM_ROOT'), 'setup.sh') + '\n')
-        fout.write('source ' + os.path.join(os.getenv('PYTHIABKG_ROOT'), 'setup.sh') + '\n')
+        #fout.write('source ' + os.path.join(os.getenv('PYTHIABKG_ROOT'), 'setup.sh') + '\n')
         fout.write('cd $_CONDOR_SCRATCH_DIR\n')
         fout.write('start_sec=$(date +%s)\n')
         fout.write('start_time=$(date +%F_%T)\n')
-        fout.write('%s %s\n' % (DPSim, confs[i]))
+        fout.write('%s %s\n' % (DPPythia, confs[i]))
         fout.write('status=$?\n')
         fout.write('stop_time=$(date +%F_%T)\n')
         fout.write('stop_sec=$(date +%s)\n')
@@ -131,7 +131,7 @@ if options.grid:
 
     # make jobsub commands and submit
     for i in range(len(confs)):
-        cmd = 'jobsub_submit -g --OS=SL6 --use_gftp --resource-provides=usage_model=DEDICATED,OPPORTUNISTIC -e IFDHC_VERSION'
+        cmd = 'jobsub_submit -g --OS=SL6 --expected-lifetime=57600 --use_gftp --resource-provides=usage_model=DEDICATED,OPPORTUNISTIC -e IFDHC_VERSION'
         #cmd = 'jobsub_submit -g --OS=SL6 --no_log_buffer --resource-provides=usage_model=DEDICATED,OPPORTUNISTIC -e IFDHC_VERSION'
         cmd = cmd + ' -L %s' % logs[i]
         cmd = cmd + ' -f %s' % confs[i]

@@ -3,8 +3,8 @@
 import os
 from datetime import datetime
 
-class DPSimJobConf:
-    """ Container of base DPSim job configuration, and generator of new job cards """
+class DPPythiaJobConf:
+    """ Container of base DPPythia job configuration, and generator of new job cards """
 
     def __init__(self, template, reserved = []):
         """ read the template conf file, ignore the key words that are passed in reserved list """
@@ -67,7 +67,7 @@ class DPSimJobConf:
         return True
 
 if __name__ == '__main__':
-    a = DPSimJobConf('../conf/example.conf', reserved = ['nEvents'])
+    a = DPPythiaJobConf('../conf/example.conf', reserved = ['nEvents'])
     print a.x1Min
     print a._10
 
