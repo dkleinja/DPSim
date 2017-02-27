@@ -11,7 +11,7 @@
 #include "DPDigitizer.h"
 
 #define SetBit(n) (1 << (n))
-#define NTRPLANES 3
+#define NTRPLANES 4
 
 enum DPTriggerType
 {
