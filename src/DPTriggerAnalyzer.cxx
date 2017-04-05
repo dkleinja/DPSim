@@ -16,6 +16,7 @@ DPTriggerRoad::DPTriggerRoad(const std::list<int>& path) : roadID(0), sigWeight(
     uniqueTrIDs.clear();
     for(std::list<int>::const_iterator iter = path.begin(); iter != path.end(); ++iter)
     {
+        if(*iter < 0) continue;
         uniqueTrIDs.push_back(*iter);
     }
 }
@@ -60,6 +61,17 @@ bool DPTriggerRoad::operator == (const DPTriggerRoad& elem) const
 bool DPTriggerRoad::operator < (const DPTriggerRoad& elem) const
 {
     return sigWeight < elem.sigWeight;
+}
+
+TString DPTriggerRoad::getStringID()
+{
+    TString sid;
+    for(unsigned int i = 0; i < uniqueTrIDs.size(); ++i)
+    {
+        sid = sid + Form("%06d", uniqueTrIDs[i]);
+    }
+
+    return sid;
 }
 
 std::ostream& operator << (std::ostream& os, const DPTriggerRoad& road)
@@ -114,7 +126,7 @@ DPTriggerAnalyzer::DPTriggerAnalyzer() : NIMONLY(false)
         road.setPxMin(pXmin);
 
         for(int i = 0; i < NTRPLANES; ++i) road.addTrElement(uIDs[i]);
-        roads[(-charge+1)/2].push_back(road);
+        roads[(-charge+1)/2].insert(std::map<TString, DPTriggerRoad>::value_type(road.getStringID(), road));
     }
 
     //build the search matrix
@@ -133,12 +145,30 @@ void DPTriggerAnalyzer::analyzeTrigger(DPMCRawEvent* rawEvent)
     rawEvent->eventHeader().fTriggerBit = 0;
 
     //NIM trigger first
-    bool HXT = rawEvent->getNHits(26) > 0 && rawEvent->getNHits(32) > 0 && rawEvent->getNHits(34) > 0 && rawEvent->getNHits(40) > 0;
-    bool HXB = rawEvent->getNHits(25) > 0 && rawEvent->getNHits(31) > 0 && rawEvent->getNHits(33) > 0 && rawEvent->getNHits(39) > 0;
-    bool HYL = rawEvent->getNHits(27) > 0 && rawEvent->getNHits(29) > 0 && rawEvent->getNHits(35) > 0 && rawEvent->getNHits(37) > 0;
-    bool HYR = rawEvent->getNHits(28) > 0 && rawEvent->getNHits(30) > 0 && rawEvent->getNHits(36) > 0 && rawEvent->getNHits(38) > 0;
-    if(HYL || HYR) rawEvent->eventHeader().fTriggerBit |= NIM1;
-    if(HXT || HXB) rawEvent->eventHeader().fTriggerBit |= NIM2;
+    bool HXT = (rawEvent->getNHits(26) > 0) && (rawEvent->getNHits(32) > 0) && (rawEvent->getNHits(34) > 0) && (rawEvent->getNHits(40) > 0);
+    bool HXB = (rawEvent->getNHits(25) > 0) && (rawEvent->getNHits(31) > 0) && (rawEvent->getNHits(33) > 0) && (rawEvent->getNHits(39) > 0);
+    bool HYL = (rawEvent->getNHits(27) > 0) && (rawEvent->getNHits(29) > 0) && (rawEvent->getNHits(35) > 0) && (rawEvent->getNHits(37) > 0);
+    bool HYR = (rawEvent->getNHits(28) > 0) && (rawEvent->getNHits(30) > 0) && (rawEvent->getNHits(36) > 0) && (rawEvent->getNHits(38) > 0);
+    bool HFYL = (rawEvent->getNHits(27) > 0) && (rawEvent->getNHits(29) > 0);
+    bool HFYR = (rawEvent->getNHits(28) > 0) && (rawEvent->getNHits(30) > 0);
+    bool HBYL = (rawEvent->getNHits(35) > 0) && (rawEvent->getNHits(37) > 0);
+    bool HBYR = (rawEvent->getNHits(36) > 0) && (rawEvent->getNHits(38) > 0);
+    bool H1YL = (rawEvent->getNHits(29) > 0) && (rawEvent->getNHits(35) > 0) && (rawEvent->getNHits(37) > 0);
+    bool H1YR = (rawEvent->getNHits(30) > 0) && (rawEvent->getNHits(36) > 0) && (rawEvent->getNHits(38) > 0);
+    bool H2YL = (rawEvent->getNHits(27) > 0) && (rawEvent->getNHits(35) > 0) && (rawEvent->getNHits(37) > 0);
+    bool H2YR = (rawEvent->getNHits(28) > 0) && (rawEvent->getNHits(36) > 0) && (rawEvent->getNHits(38) > 0);
+    bool H3YL = (rawEvent->getNHits(27) > 0) && (rawEvent->getNHits(29) > 0) && (rawEvent->getNHits(37) > 0);
+    bool H3YR = (rawEvent->getNHits(28) > 0) && (rawEvent->getNHits(30) > 0) && (rawEvent->getNHits(38) > 0);
+    bool H4YL = (rawEvent->getNHits(27) > 0) && (rawEvent->getNHits(29) > 0) && (rawEvent->getNHits(35) > 0);
+    bool H4YR = (rawEvent->getNHits(28) > 0) && (rawEvent->getNHits(30) > 0) && (rawEvent->getNHits(36) > 0);
+    if(HYL || HYR) rawEvent->eventHeader().fTriggerBit |= NIM0; //try bitwise OR here;
+    //if(HXT || HXB) rawEvent->eventHeader().fTriggerBit |= NIM2;
+    if(H1YL || H1YR) rawEvent->eventHeader().fTriggerBit |= NIM1;
+    if(H2YL || H2YR) rawEvent->eventHeader().fTriggerBit |= NIM2;
+    if(H3YL || H3YR) rawEvent->eventHeader().fTriggerBit |= NIM3;
+    if(H4YL || H4YR) rawEvent->eventHeader().fTriggerBit |= NIM4;
+    if(HFYL || HFYR) rawEvent->eventHeader().fTriggerBit |= NIM5;
+    if(HBYL || HBYR) rawEvent->eventHeader().fTriggerBit |= NIM6;
 
     //if matrix is not inited, return
     if(NIMONLY) return;
@@ -218,13 +248,13 @@ void DPTriggerAnalyzer::buildTriggerMatrix()
     for(int i = 0; i < 2; ++i)
     {
         matrix[i] = new MatrixNode(-1);
-        for(std::list<DPTriggerRoad>::iterator iter = roads[i].begin(); iter != roads[i].end(); ++iter)
+        for(std::map<TString, DPTriggerRoad>::iterator iter = roads[i].begin(); iter != roads[i].end(); ++iter)
         {
             MatrixNode* parentNode[NTRPLANES+1]; //NOTE: the last entry is useless, just to keep the following code simpler
             parentNode[0] = matrix[i];
             for(int j = 0; j < NTRPLANES; ++j)
             {
-                int uniqueID = iter->getTrID(j);
+                int uniqueID = iter->second.getTrID(j);
                 bool isNewNode = true;
                 for(std::list<MatrixNode*>::iterator jter = parentNode[j]->children.begin(); jter != parentNode[j]->children.end(); ++jter)
                 {
@@ -281,7 +311,8 @@ void DPTriggerAnalyzer::searchMatrix(MatrixNode* node, int level, int index)
     if(node->children.empty())
     {
         //printPath();
-        roads_found[index].push_back(DPTriggerRoad(path));
+        DPTriggerRoad road_found(path);
+        if(roads[index].find(road_found.getStringID()) != roads[index].end()) roads_found[index].push_back(road_found);
         path.pop_back();
 
         return;
