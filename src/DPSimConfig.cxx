@@ -195,7 +195,8 @@ bool DPSimConfig::sanityCheck()
     if(checkFile(outputFileName))
     {
         std::cout << "WARNING: Output file exists, will be overwritten. " << std::endl;
-        if(!ignoreWarnings) return false;
+        //if(!ignoreWarnings) return false;
+        return true;
     }
 
     if(!checkFile(triggerMatrix))
