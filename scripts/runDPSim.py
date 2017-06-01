@@ -139,6 +139,7 @@ if options.grid:
     # make jobsub commands and submit
     for i in range(len(confs)):
         cmd = 'jobsub_submit -g --OS=SL6 --use_gftp --resource-provides=usage_model=DEDICATED,OPPORTUNISTIC -e IFDHC_VERSION'
+        #cmd = 'jobsub_submit -g --OS=SL6 --expected-lifetime=57600 --use_gftp --resource-provides=usage_model=DEDICATED,OPPORTUNISTIC -e IFDHC_VERSION'
         cmd = cmd + ' -L %s' % logs[i]
         cmd = cmd + ' -f %s' % confs[i]
         if len(options.input) > 0:
