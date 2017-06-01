@@ -5,6 +5,9 @@
 #include <vector>
 #include <set>
 #include <list>
+#include <map>
+
+#include <TString.h>
 
 #include "DPSimConfig.h"
 #include "DPMCRawEvent.h"
@@ -23,8 +26,19 @@ enum DPTriggerType
     NIM1 = SetBit(5),
     NIM2 = SetBit(6),
     NIM3 = SetBit(7),
-    NIM4 = SetBit(8),
-    NIM5 = SetBit(9)
+    H1 = SetBit(8),
+    H2 = SetBit(9),
+    H3 = SetBit(10),
+    H4 = SetBit(11),
+    H12 = SetBit(12),
+    H13 = SetBit(13),
+    H14 = SetBit(14),
+    H23 = SetBit(15),
+    H24 = SetBit(16),
+    H34 = SetBit(17),
+    H123 = SetBit(18),
+    H124 = SetBit(19),
+    H234 = SetBit(20),
 };
 
 class DPTriggerRoad
@@ -54,6 +68,7 @@ public:
     int getTrID(unsigned int i) const { return i < NTRPLANES ? uniqueTrIDs[i] : 0; }
     int getTrDetectorID(unsigned int i) const { return getTrID(i)/1000; }
     int getTrElementID(unsigned int i) const { return getTrID(i) % 1000; }
+    TString getStringID();
     //@}
 
     //!Sets
@@ -137,7 +152,7 @@ private:
     //!the trigger matrix, 0 for mu+, 1 for mu-
     //@{
     MatrixNode* matrix[2];
-    std::list<DPTriggerRoad> roads[2];
+    std::map<TString, DPTriggerRoad> roads[2];
     //@}
 
     //!container of the roads found for +/-
